@@ -73,6 +73,31 @@ namespace MoneyRest
             return result;
         }
 
+        /// <summary>
+        /// C из n по k
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        private int C(int n, int k)
+        {
+            return Factorial(n) / Factorial(k) / Factorial(n - k);
+        }
+
+        /// <summary>
+        /// Факториал
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private int Factorial(int n)
+        {
+            int res = 1;
+            for (var i = n; i > 1; i--)
+                res *= i;
+
+            return res;
+        }
+
         private List<decimal> Combination(int index, int k, IEnumerable<decimal> inputs)
         {
             return null;
