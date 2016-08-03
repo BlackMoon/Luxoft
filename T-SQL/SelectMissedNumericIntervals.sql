@@ -15,7 +15,7 @@ values
 (9),
 (32);
 
-/* Решение */
+/* Решение (Поиск следующего значения. Если разница между значениями больше 1 --> пропущенное число)*/
 select l + 1 [left], r - 1 [right] from (
 	select v.number as l, 
 		(select top 1 [number] from @values where number > v.number order by number) as r	
