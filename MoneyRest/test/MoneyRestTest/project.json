@@ -1,6 +1,6 @@
 {
     "version": "1.0.0-*",
-
+    "testRunner": "xunit",
     "dependencies": {
         "MoneyRest": "1.0.0-*",
         "xunit": "2.2.0-beta2-build3300",

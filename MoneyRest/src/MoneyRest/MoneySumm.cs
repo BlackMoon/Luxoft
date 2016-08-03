@@ -39,16 +39,94 @@ namespace MoneyRest
                     Numbers = new decimal[len - 1];
                     Array.Copy(numbers, 1, Numbers, 0, len - 1);
                     Array.Sort(Numbers);
+                    Array.Reverse(Numbers);
                 }
             }
         }
+
+        /// <summary>
+        /// Найти max ближайшее к числу
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="startIndex"></param>
+        /// <returns></returns>
+        private decimal? FindNearest(decimal value, int startIndex = 0)
+        {
+            decimal? result = null;
+
+            if (Numbers != null)
+            {
+                decimal delta = decimal.MaxValue;
+
+                for(int i = startIndex; i < Numbers.Length; i++)
+                {
+                    decimal num = Numbers[i];
+                    decimal newDelta = Math.Abs(value - num);
+                    if (newDelta < delta)
+                    {
+                        result = num;
+                        delta = newDelta;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private List<decimal> Combination(int index, int k, IEnumerable<decimal> inputs)
+        {
+            return null;
+        } 
 
         public void CalculateSummands()
         {
             if (Numbers != null)
             {
-                int len = Numbers.Length;
+                for (int i = 0; i < Numbers.Length; i++)
+                {
+                    decimal num = Numbers[i];
+                    decimal summ = 0;
+                    IList<decimal> rests = new List<decimal>();
 
+                    // поиск max ближайшего к value
+                    summ += num;
+                    rests.Add(num);
+                    
+                    while (summ < Total)
+                    {
+                        decimal nearest = FindNearest(Total - summ) ?? 0;
+
+                        if (summ + nearest <= Total)
+                        {
+                            summ += nearest;
+                            rests.Add(nearest);
+                        }
+                        else
+                            break;
+                    }
+
+                    if (summ == Total)
+                    {
+                        Summands = rests;
+                        break;
+                    }
+
+                    /*
+                    for (int i = i; i < len; i++)
+                    {
+                        //decimal nearest = FindNearest(value) ?? 0;
+                        summ += nearest;
+
+                        rests.Add(nearest);
+                        if (summ == Total)
+                        {
+                            found = true;  
+                            break;
+                        }
+                        value = Total - summ;
+                    }*/
+                }
+                /*
                 for (int ix = 0; ix < len; ix++)
                 {
                     bool found = false;
@@ -57,14 +135,17 @@ namespace MoneyRest
                     IList<decimal> rests = new List<decimal>();
                     for (int i = ix; i < len; i++)
                     {
-                        summ += Numbers[i];
-                        rests.Add(Numbers[i]);
-
-                        if (summ >= Total)
+                        decimal num = Numbers[i];
+                        if (summ + num <= Total)
                         {
+                            summ += num;
+                            rests.Add(num);
+
                             if (summ == Total)
+                            {
                                 found = true;
-                            break;
+                                break;
+                            }
                         }
                     }
 
@@ -73,7 +154,7 @@ namespace MoneyRest
                         Summands = rests;
                         break;
                     }
-                }
+                }*/
             }
         }
     }
