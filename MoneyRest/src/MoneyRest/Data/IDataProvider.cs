@@ -9,15 +9,17 @@ namespace MoneyRest.Data
     public interface IDataProvider<T> where T : class
     {
         /// <summary>
-        /// Сохранить записи, старые данные удаляются
+        /// Сохранить записи
         /// </summary>
         /// <param name="items"></param>
-        void Save(IEnumerable<T> items);
+        /// <param name="path"></param>
+        void Save(IEnumerable<T> items, string path);
 
         /// <summary>
         /// Чтение записей
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<T> Read();
+        /// <param name="path"></param>
+        /// <returns>IEnumerable<T></returns>
+        IEnumerable<T> Read(string path);
     }
 }
