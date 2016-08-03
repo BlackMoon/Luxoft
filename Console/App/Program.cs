@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using MoneyRest;
 using MoneyRest.Data;
@@ -16,7 +17,7 @@ namespace App
         static void Main(string[] args)
         {
             if (args.Length == 0)
-                Console.WriteLine("usage: moneyrest input_file, [output_file]");
+                Console.WriteLine("usage: app input_file, [output_file]");
             else
             {
                 WriteWelcome();
@@ -31,15 +32,20 @@ namespace App
 
                     if (moneySumms != null)
                     {
-                        Task t = Task.Factory.StartNew(() =>
+                        CancellationTokenSource cts = new CancellationTokenSource();
+                        CancellationToken token = cts.Token;
+                        cts.CancelAfter(TimeOut * 1000);
+                        
+                        Task.Factory.StartNew(() =>
                         {
                             foreach (MoneySumm ms in moneySumms)
                             {
+                                if (token.IsCancellationRequested)
+                                    return;
+                                
                                 ms.CalculateSummands();
                             }
-                        });
-
-                        t.Wait(TimeOut * 1000);
+                        }, token);
 
                         provider.Save(moneySumms, outFile);
                         Console.WriteLine($"Сформирован файл: {outFile}");
