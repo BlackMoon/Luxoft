@@ -34,18 +34,23 @@ namespace MoneyRest
 
                     if (moneySumms != null)
                     {
-                        Task t = Task.Factory.StartNew(() =>
+                        CancellationTokenSource cts = new CancellationTokenSource();
+                        CancellationToken token = cts.Token;
+                        cts.CancelAfter(TimeOut * 1000);
+
+                        Task.Factory.StartNew(() =>
                         {
                             foreach (MoneySumm ms in moneySumms)
                             {
+                                if (token.IsCancellationRequested)
+                                    return;
+
                                 ms.CalculateSummands();
                             }
-                        });
-
-                        t.Wait(TimeOut * 1000);
+                        }, token);
 
                         provider.Save(moneySumms, outFile);
-                        Console.WriteLine("Сформирован файл");
+                        Console.WriteLine($"Сформирован файл: {outFile}");
                     }
                 }
                 catch (AggregateException aex)
