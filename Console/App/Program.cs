@@ -36,16 +36,18 @@ namespace App
                         CancellationToken token = cts.Token;
                         cts.CancelAfter(TimeOut * 1000);
                         
-                        Task.Factory.StartNew(() =>
-                        {
-                            foreach (MoneySumm ms in moneySumms)
+                        Task.Factory
+                                .StartNew(() =>
                             {
-                                if (token.IsCancellationRequested)
-                                    return;
+                                foreach (MoneySumm ms in moneySumms)
+                                {
+                                    if (token.IsCancellationRequested)
+                                        return;
                                 
-                                ms.CalculateSummands();
-                            }
-                        }, token);
+                                    ms.CalculateSummands();
+                                }
+                            }, token)
+                            .Wait(token);
 
                         provider.Save(moneySumms, outFile);
                         Console.WriteLine($"Сформирован файл: {outFile}");
