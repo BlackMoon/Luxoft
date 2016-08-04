@@ -51,10 +51,10 @@ namespace MoneyRest.Data
             foreach (string line in File.ReadLines(path))
             {
                 string[] x = line.Split(new []{ Separator }, StringSplitOptions.RemoveEmptyEntries);
-                decimal [] numbers = new decimal[x.Length];
+                long [] numbers = new long[x.Length];
                 for (var i = 0; i < x.Length; i++)
                 {
-                    numbers[i] = Convert.ToDecimal(x[i]);
+                    numbers[i] = Convert.ToInt64(x[i]);
                 }
                     
                 yield return new MoneySumm(numbers);

@@ -5,6 +5,7 @@ using MoneyRest.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MoneyRest
@@ -38,16 +39,18 @@ namespace MoneyRest
                         CancellationToken token = cts.Token;
                         cts.CancelAfter(TimeOut * 1000);
 
-                        Task.Factory.StartNew(() =>
-                        {
-                            foreach (MoneySumm ms in moneySumms)
+                        Task.Factory
+                            .StartNew(() =>
                             {
-                                if (token.IsCancellationRequested)
-                                    return;
+                                foreach (MoneySumm ms in moneySumms)
+                                {
+                                    if (token.IsCancellationRequested)
+                                        return;
 
-                                ms.CalculateSummands();
-                            }
-                        }, token);
+                                    ms.CalculateSummands();
+                                }
+                            }, token)
+                            .Wait(token);
 
                         provider.Save(moneySumms, outFile);
                         Console.WriteLine($"Сформирован файл: {outFile}");
@@ -66,10 +69,10 @@ namespace MoneyRest
                     Console.WriteLine();
                     Console.WriteLine(ex.Message);
                 }
-
-                Console.ReadLine();
             }
 
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadKey();
         }
 
         private static void WriteWelcome()
