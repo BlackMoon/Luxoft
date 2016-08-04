@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MoneyRest": {
+      "commandName": "Project",
+      "commandLineArgs": "in.txt"
+    }
+  }
+}
