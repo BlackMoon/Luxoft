@@ -12,7 +12,8 @@
             "type": "platform",
             "version": "1.0.0"
         },
-        "System.Diagnostics.Contracts": "4.0.1"
+        "System.Diagnostics.Contracts": "4.0.1",
+        "System.Text.Encoding.CodePages": "4.0.1"
     },
 
   "frameworks": {

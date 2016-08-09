@@ -22,6 +22,9 @@ namespace client
 
         public static void Main(string[] args)
         {
+            // кодировка для конслои
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             IContainer container = ConfigureServices();
 
             IMessageDispatcher dispatcher = container.Resolve<IMessageDispatcher>();
