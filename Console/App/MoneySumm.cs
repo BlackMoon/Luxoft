@@ -122,6 +122,7 @@ namespace MoneyRest
         {
             if (Numbers != null)
             {
+                // иначе получим OutOfMemoryException on declaration of Large Array
                 if (Total < Int32.MaxValue)
                     CombinationsExact();
                 else

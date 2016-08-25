@@ -10,11 +10,22 @@ using MoneyRest.Data;
 
 namespace App
 {
+    static class A
+    {
+        public static int x = B.x + 1;
+    }
+
+    static class B
+    {
+        public static int x = A.x + 1;
+    }
+
+
     class Program
     {
         private const int TimeOut = 60; // in seconds
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length == 0)
                 Console.WriteLine("usage: app input_file, [output_file]");
@@ -23,7 +34,9 @@ namespace App
                 WriteWelcome();
 
                 string inFile = args[0];
-                string outFile = args.Length == 1 ? Path.Combine(Path.GetDirectoryName(Path.GetFullPath(inFile)), "out.txt") : args[0];
+                string outFile = args.Length == 1
+                    ? Path.Combine(Path.GetDirectoryName(Path.GetFullPath(inFile)), "out.txt")
+                    : args[0];
 
                 try
                 {
@@ -34,16 +47,16 @@ namespace App
                     {
                         CancellationTokenSource cts = new CancellationTokenSource();
                         CancellationToken token = cts.Token;
-                        cts.CancelAfter(TimeOut * 1000);
-                        
+                        cts.CancelAfter(TimeOut*1000);
+
                         Task.Factory
-                                .StartNew(() =>
+                            .StartNew(() =>
                             {
                                 foreach (MoneySumm ms in moneySumms)
                                 {
                                     if (token.IsCancellationRequested)
                                         return;
-                                
+
                                     ms.CalculateSummands();
                                 }
                             }, token)
@@ -67,6 +80,15 @@ namespace App
                     Console.WriteLine(ex.Message);
                 }
             }
+
+            int i = int.MaxValue - 3;
+            for (; i <= int.MaxValue; i++)
+            {
+                Console.WriteLine(i);
+            }
+
+            const int a = 10*10*1000*10000;
+            Console.WriteLine(a);
 
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
